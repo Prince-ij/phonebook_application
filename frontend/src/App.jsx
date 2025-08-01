@@ -111,10 +111,11 @@ const App = () => {
       if (confirm(`${newName} already exists, replace number ?`)) {
         const person = persons.find((p) => p.name === newName);
         const newData = { ...person, number: newNumber };
-        personService.update(person.id, newData).then((returnedData) => {
-          setPersons(
-            persons.map((p) => (p.id === person.id ? returnedData : p)),
-          );
+        personService.update(person.id, newData)
+        .then((returnedData) => {
+            setPersons(
+              persons.map((p) => (p.id === person.id ? returnedData : p)),
+            );
           setMsg('Number updated successfully ')
           setClassType('success')
 
@@ -140,9 +141,13 @@ const App = () => {
       alert(`number already exists in phonebook`);
       alreadyIn = true;
     }
+    console.log('already in value before create', alreadyIn)
     if (!alreadyIn) {
       const personObject = { name: newName, number: newNumber };
-      personService.create(personObject).then((returnedPerson) => {
+      console.log('Manchi wan enter', personObject)
+
+      personService.create(personObject)
+      .then((returnedPerson) => {
         setPersons(persons.concat(returnedPerson));
         setMsg('New Contact added successfully ')
         setClassType('success')
@@ -151,10 +156,19 @@ const App = () => {
           setMsg(null)
           setClassType(null)
         }, 5000)
-      });
+      })
+      .catch(error => {
+        setMsg(error.response.data.error)
+        setClassType('error')
+
+        setTimeout(() => {
+          setMsg(null)
+          setClassType(null)
+        }, 5000)
+      })
     }
-    setNewName("");
-    setNewNumber("");
+    setNewName('')
+    setNewNumber('')
   };
 
   const handleDelete = (id) => {

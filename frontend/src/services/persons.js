@@ -8,7 +8,7 @@ const getAll = () => {
 
 const create = (personObject) => {
   const request = axios.post(baseUrl, personObject);
-  return request.then((response) => response.data);
+  return request.then((response) => response.data)
 };
 
 const purge = (id) => {
